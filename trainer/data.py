@@ -71,11 +71,11 @@ def preprocess(conversations: Sequence[Sequence[dict]], tokenizer: transformers.
     print("Tokenizing dataset...")
     for conv in tqdm(conversations):
         current_conv = conv["messages"]
-        tokenized_responses = []
-        for msg in current_conv:
-            if msg["role"] == "assistant":
-                tokenized_responses.append(tokenizer.encode(msg["content"], add_special_tokens=False))
-
+        tokenized_responses = [
+            tokenizer.encode(msg["content"], add_special_tokens=False)
+            for msg in current_conv
+            if msg["role"] == "assistant"
+        ]
         tokenized_conv = tokenizer.apply_chat_template(current_conv, chat_template=conversation_template, max_length=max_tokens, truncation=True)
         all_input_ids.append(torch.LongTensor(tokenized_conv))
 

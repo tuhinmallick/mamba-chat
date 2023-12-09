@@ -13,9 +13,7 @@ class MambaTrainer(Trainer):
         labels = labels[:, 1:].contiguous()
 
         loss_fct = torch.nn.CrossEntropyLoss()
-        lm_loss = loss_fct(shift_logits.view(-1, shift_logits.size(-1)), labels.view(-1))
-
-        return lm_loss
+        return loss_fct(shift_logits.view(-1, shift_logits.size(-1)), labels.view(-1))
 
     def save_model(self, output_dir, _internal_call):
         if not os.path.exists(output_dir):
